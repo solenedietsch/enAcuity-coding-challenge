@@ -40,6 +40,12 @@ class VideoPlayerApp:
             if event == sg.WIN_CLOSED:
                 break
 
+            elif event == '-FILE-':
+                filename = values['-FILE-']
+                self.video_loader = VideoLoader(filename)
+                self.timeout = 1000 // self.video_loader.fps
+                self.video_player = VideoPlayer(self.video_loader)
+
 
 
         self.window.close()

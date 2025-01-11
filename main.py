@@ -1,3 +1,5 @@
-# main.py
+from app.gui import VideoPlayerApp
+
 if __name__ == "__main__":
-    print("Project Initialized")
+    app = VideoPlayerApp()
+    app.launch_app()

@@ -1,9 +1,13 @@
+import os
+
 import cv2
 import PySimpleGUI as sg
 
 from app.components.video_player import VideoPlayer
 from data.images.output import button_play, button_pause, button_next, button_previous
-from app.components.video_loader import VideoLoader
+
+VIDEO_FILENAME = os.path.join(os.getcwd(), "../data/video01_cropped.mp4")
+
 
 def create_window():
     sg.theme('Black')
@@ -17,7 +21,7 @@ def create_window():
             sg.Button(image_data=button_pause, key='-PAUSE-', border_width=0, button_color=button_color),
             sg.Button(image_data=button_next, key='-NEXT-', border_width=0, button_color=button_color)],
     ]
-    window = sg.Window("EnAcuity Player", layout, element_justification='c')
+    window = sg.Window("EnAcuity Player", layout, element_justification='c', finalize=True)
 
     return window
 
@@ -25,18 +29,37 @@ def create_window():
 class VideoPlayerApp:
     def __init__(self):
         self.window = create_window()
-        self.video_loader = None
+
+        self.video_player = None
         self.video_player = None
         self.timeout = 0
-
         self.image_element = self.window['-IMAGE-']
-        self.ret = False
-        self.frame = None
 
-    def update_image(self):
-        if self.ret:
-            imgbytes = cv2.imencode('.ppm', self.frame)[1].tobytes()
+        self.current_frame_id = 0
+
+        # Add a default video file
+        self.filename = VIDEO_FILENAME
+        self.update_filename(filename=self.filename)
+
+    def update_filename(self, filename='', values=None,):
+        if filename:
+            self.filename = filename
+        elif values:
+            self.filename = values['-FILE-']
+
+        self.video_player = VideoPlayer(self.filename)
+        self.timeout = 1000 // self.video_player.fps
+
+        # Read the first frame
+        self.current_frame_id = 0
+        ret, frame = self.video_player.video_file.read()
+        self.update_image(ret, frame)
+
+    def update_image(self, ret=False, frame=None):
+        if ret:
+            imgbytes = cv2.imencode('.ppm', frame)[1].tobytes()
             self.image_element.update(data=imgbytes)
+
 
     def launch_app(self):
         # Main loop
@@ -47,12 +70,7 @@ class VideoPlayerApp:
                 break
 
             elif event == '-FILE-':
-                filename = values['-FILE-']
-                self.video_loader = VideoLoader(filename)
-                self.timeout = 1000 // self.video_loader.fps
-                self.video_player = VideoPlayer(self.video_loader)
-                self.ret, self.frame = self.video_loader.video_file.read()
-                self.update_image()
+                self.update_filename(values)
 
             elif event == '-PLAY-':
                 self.video_player.play_video()
@@ -61,14 +79,16 @@ class VideoPlayerApp:
                 self.video_player.pause_video()
 
             elif event == '-NEXT-':
-                self.video_player.next_frame()
+                ret, frame = self.video_player.next_frame()
+                self.update_image(ret, frame)
 
             elif event == '-PREVIOUS-':
-                self.video_player.previous_frame()
+                ret, frame = self.video_player.previous_frame()
+                self.update_image(ret, frame)
 
-            if self.video_player and self.video_player.is_playing:
-                self.ret, self.frame = self.video_loader.video_file.read()
-                self.update_image()
+            if self.video_player:
+                ret, frame = self.video_player.keep_playing()
+                self.update_image(ret, frame)
 
 
 

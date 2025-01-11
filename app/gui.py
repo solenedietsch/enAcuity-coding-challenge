@@ -51,6 +51,8 @@ class VideoPlayerApp:
                 self.video_loader = VideoLoader(filename)
                 self.timeout = 1000 // self.video_loader.fps
                 self.video_player = VideoPlayer(self.video_loader)
+                self.ret, self.frame = self.video_loader.video_file.read()
+                self.update_image()
 
             elif event == '-PLAY-':
                 self.video_player.play_video()

@@ -32,6 +32,12 @@ class VideoPlayerApp:
         self.image_element = self.window['-IMAGE-']
         self.ret = False
         self.frame = None
+
+    def update_image(self):
+        if self.ret:
+            imgbytes = cv2.imencode('.ppm', self.frame)[1].tobytes()
+            self.image_element.update(data=imgbytes)
+
     def launch_app(self):
         # Main loop
         while True:
@@ -57,6 +63,10 @@ class VideoPlayerApp:
 
             elif event == '-PREVIOUS-':
                 self.video_player.previous_frame()
+
+            if self.video_player and self.video_player.is_playing:
+                self.ret, self.frame = self.video_loader.video_file.read()
+                self.update_image()
 
 
 

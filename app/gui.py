@@ -1,5 +1,9 @@
+import cv2
 import PySimpleGUI as sg
+
+from app.components.video_player import VideoPlayer
 from data.images.output import button_play, button_pause, button_next, button_previous
+from app.components.video_loader import VideoLoader
 
 def create_window():
     sg.theme('Black')
@@ -20,8 +24,14 @@ def create_window():
 
 class VideoPlayerApp:
     def __init__(self):
+        self.window = create_window()
+        self.video_loader = None
+        self.video_player = None
         self.timeout = 0
+
         self.image_element = self.window['-IMAGE-']
+        self.ret = False
+        self.frame = None
     def launch_app(self):
         # Main loop
         while True:

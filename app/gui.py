@@ -46,6 +46,18 @@ class VideoPlayerApp:
                 self.timeout = 1000 // self.video_loader.fps
                 self.video_player = VideoPlayer(self.video_loader)
 
+            elif event == '-PLAY-':
+                self.video_player.play_video()
+
+            elif event == '-PAUSE-':
+                self.video_player.pause_video()
+
+            elif event == '-NEXT-':
+                self.video_player.next_frame()
+
+            elif event == '-PREVIOUS-':
+                self.video_player.previous_frame()
+
 
 
         self.window.close()

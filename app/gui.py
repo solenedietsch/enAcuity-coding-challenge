@@ -17,17 +17,24 @@ def create_window():
 
     return window
 
-def launch_app():
-    window = create_window()
 
-    while True:
-        event, values = window.read()
+class VideoPlayerApp:
+    def __init__(self):
+        self.timeout = 0
+        self.image_element = self.window['-IMAGE-']
+    def launch_app(self):
+        # Main loop
+        while True:
+            event, values = self.window.read(timeout=self.timeout)
 
-        if event == sg.WIN_CLOSED:
-            break
+            if event == sg.WIN_CLOSED:
+                break
 
-    window.close()
+
+
+        self.window.close()
 
 if __name__ == "__main__":
-    launch_app()
+    app = VideoPlayerApp()
+    app.launch_app()
 

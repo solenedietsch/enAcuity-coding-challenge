@@ -41,19 +41,23 @@ class VideoPlayerApp:
         self.filename = VIDEO_FILENAME
         self.update_filename(filename=self.filename)
 
-    def update_filename(self, filename='', values=None,):
+
+
+    def update_filename(self, filename='', values=None):
         if filename:
             self.filename = filename
+            print(f"Selected video file: {self.filename}")
         elif values:
             self.filename = values['-FILE-']
+            print(f"Selected video file: {self.filename}")
 
         self.video_player = VideoPlayer(self.filename)
-        self.timeout = 1000 // self.video_player.fps
-
         # Read the first frame
         self.current_frame_id = 0
         ret, frame = self.video_player.video_file.read()
         self.update_image(ret, frame)
+
+        self.timeout = 1000 // self.video_player.fps
 
     def update_image(self, ret=False, frame=None):
         if ret:
@@ -70,7 +74,7 @@ class VideoPlayerApp:
                 break
 
             elif event == '-FILE-':
-                self.update_filename(values)
+                self.update_filename(values=values)
 
             elif event == '-PLAY-':
                 self.video_player.play_video()

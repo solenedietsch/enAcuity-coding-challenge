@@ -66,7 +66,7 @@ class VideoPlayerApp:
             [time_elapsed_text, self.video_slider, time_remaining_text],
             [sg.Button(image_data=button_previous, key='-PREVIOUS-', border_width=0, button_color=button_color),
              sg.Button(image_data=button_play, key='-PLAY-', border_width=0, button_color=button_color),
-             sg.Button(image_data=button_pause, key='-PAUSE-', border_width=0, button_color=button_color),
+             sg.Button(image_data=button_pause, key='-PAUSE-', border_width=0, button_color=button_color, disabled=True),
              sg.Button(image_data=button_next, key='-NEXT-', border_width=0, button_color=button_color)],
         ]
 
@@ -92,9 +92,13 @@ class VideoPlayerApp:
 
             elif event == '-PLAY-':
                 self.video_player.play_video()
+                self.window['-PLAY-'].update(disabled=True)
+                self.window['-PAUSE-'].update(disabled=False)
 
             elif event == '-PAUSE-':
                 self.video_player.pause_video()
+                self.window['-PAUSE-'].update(disabled=True)
+                self.window['-PLAY-'].update(disabled=False)
 
             elif event == '-NEXT-':
                 ret, frame = self.video_player.next_frame()

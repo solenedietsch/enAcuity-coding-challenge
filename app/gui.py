@@ -123,6 +123,9 @@ class VideoPlayerApp:
                 ret, frame = self.video_player.keep_playing()
                 # Update the image shown
                 self.update_image(ret, frame)
+                # Update the time elapsed and remaining in the GUI
+                self.current_frame_id = self.video_player.get_current_frame_id()
+                self.video_slider.update_slider_time_labels(self.current_frame_id)
 
         self.window.close()
 

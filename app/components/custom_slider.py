@@ -37,6 +37,16 @@ class CustomSlider(Slider):
         self.elapsed_time.update(self.get_video_duration_from_id(frame_id))
 
     def update_slider_time_labels(self, frame_id: int) -> None:
+        """
+        Updates the elapsed time and remaining time labels around the slider.
+
+        This function synchronises the displayed time labels based on the current frame ID,
+        updating the elapsed time (to the left of the slider) and remaining time (to the right).
+
+        :param frame_id: int - The current frame ID indicating the position in the video.
+        :return: :param
+        """
+
         self.update_remaining_time(frame_id)
         self.update_elapsed_time(frame_id)
 

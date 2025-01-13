@@ -9,31 +9,16 @@ from data.images.output import button_play, button_pause, button_next, button_pr
 
 VIDEO_FILENAME = os.path.join(os.getcwd(), "../data/video01_cropped.mp4")
 
-
-def create_window():
-    sg.theme('Black')
-    button_color = sg.theme_background_color()
-
-    layout = [
-        [sg.Text('Select a video to play:', size=(17, 1)), sg.InputText(key='-FILE-', enable_events=True), sg.FileBrowse(target='-FILE-')],
-        [sg.Image(key='-IMAGE-', size=(854, 480))],
-        [sg.Button(image_data=button_previous, key= '-PREVIOUS-', border_width=0, button_color=button_color) ,
-            sg.Button(image_data=button_play, key='-PLAY-', border_width=0, button_color=button_color),
-            sg.Button(image_data=button_pause, key='-PAUSE-', border_width=0, button_color=button_color),
-            sg.Button(image_data=button_next, key='-NEXT-', border_width=0, button_color=button_color)],
-    ]
-    window = sg.Window("EnAcuity Player", layout, element_justification='c', finalize=True)
-
-    return window
-
-
 class VideoPlayerApp:
     def __init__(self):
-        self.window = create_window()
+        self.window= None
         self.video_slider = None
 
         self.video_player = None
         self.video_player = None
+        # Build the window from layout
+        self.create_window()
+
         self.timeout = 0
         self.image_element = self.window['-IMAGE-']
 
@@ -71,6 +56,27 @@ class VideoPlayerApp:
         self.timeout = 1000 // self.video_player.fps
 
     def create_window(self):
+        sg.theme('Black')
+        button_color = sg.theme_background_color()
+
+        time_elapsed_text = sg.Text('', key='-TIME_ELAPSED-')
+        time_remaining_text = sg.Text('', key='-TIME_REMAINING-')
+        self.video_slider = CustomSlider('-SLIDER-', time_elapsed_text, time_remaining_text)
+
+        layout = [
+            [sg.Text('Select a video to play:', size=(17, 1)), sg.InputText(key='-FILE-', enable_events=True),
+             sg.FileBrowse(target='-FILE-')],
+            [sg.Image(key='-IMAGE-', size=(854, 480))],
+            [time_elapsed_text, self.video_slider, time_remaining_text],
+            [sg.Button(image_data=button_previous, key='-PREVIOUS-', border_width=0, button_color=button_color),
+             sg.Button(image_data=button_play, key='-PLAY-', border_width=0, button_color=button_color),
+             sg.Button(image_data=button_pause, key='-PAUSE-', border_width=0, button_color=button_color),
+             sg.Button(image_data=button_next, key='-NEXT-', border_width=0, button_color=button_color)],
+        ]
+
+        self.window = sg.Window("EnAcuity Player", layout, element_justification='c', finalize=True)
+
+
     def update_image(self, ret=False, frame=None):
         if ret:
             imgbytes = cv2.imencode('.ppm', frame)[1].tobytes()

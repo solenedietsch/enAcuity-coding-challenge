@@ -14,14 +14,13 @@ class VideoPlayerApp:
         self.window= None
         self.video_slider = None
 
-        self.video_player = None
-        self.video_player = None
         # Build the window from layout
         self.create_window()
 
         self.timeout = 0
-        self.image_element = self.window['-IMAGE-']
 
+        self.video_player = None
+        self.image_element = self.window['-IMAGE-']
         self.current_frame_id = 0
 
         # Add a default video file

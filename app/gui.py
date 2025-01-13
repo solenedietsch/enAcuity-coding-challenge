@@ -108,8 +108,13 @@ class VideoPlayerApp:
                 ret, frame = self.video_player.previous_frame()
                 self.update_image(ret, frame)
 
-            if self.video_player:
-                ret, frame = self.video_player.keep_playing()
+            elif event == '-SLIDER-':
+                # Get the frame id from the slider
+                self.current_frame_id = int(values['-SLIDER-'])
+                # Update the time elapsed and remaining in the GUI
+                self.video_slider.update_slider_time_labels(self.current_frame_id)
+                # Update the image shown
+                ret, frame = self.video_player.set_current_frame_from_id(self.current_frame_id)
                 self.update_image(ret, frame)
 
 

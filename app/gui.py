@@ -7,7 +7,7 @@ from app.components.custom_slider import CustomSlider
 from app.components.video_player import VideoPlayer
 from data.images.output import button_play, button_pause, button_next, button_previous
 
-VIDEO_FILENAME = os.path.join(os.getcwd(), "../data/video01_cropped.mp4")
+VIDEO_FILENAME = os.path.join(os.getcwd(), "data/video01_cropped.mp4")
 
 class VideoPlayerApp:
     def __init__(self):
@@ -130,6 +130,7 @@ class VideoPlayerApp:
         self.window.close()
 
 if __name__ == "__main__":
+    VIDEO_FILENAME = os.path.join(os.getcwd(), "../data/video01_cropped.mp4")
     app = VideoPlayerApp()
     app.launch_app()
 

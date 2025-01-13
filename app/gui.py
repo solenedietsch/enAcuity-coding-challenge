@@ -28,16 +28,13 @@ class VideoPlayerApp:
         self.filename = VIDEO_FILENAME
         self.update_filename(filename=self.filename)
 
-
-
     def update_filename(self, filename='', values=None):
         if filename:
             self.filename = filename
-            print(f"Selected video file: {self.filename}")
         elif values:
             self.filename = values['-FILE-']
-            print(f"Selected video file: {self.filename}")
 
+        # Set video player with the new video file
         self.video_player = VideoPlayer(self.filename)
 
         # Set the slider range

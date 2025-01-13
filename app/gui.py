@@ -3,6 +3,7 @@ import os
 import cv2
 import PySimpleGUI as sg
 
+from app.components.custom_slider import CustomSlider
 from app.components.video_player import VideoPlayer
 from data.images.output import button_play, button_pause, button_next, button_previous
 
@@ -29,6 +30,7 @@ def create_window():
 class VideoPlayerApp:
     def __init__(self):
         self.window = create_window()
+        self.video_slider = None
 
         self.video_player = None
         self.video_player = None
@@ -52,6 +54,15 @@ class VideoPlayerApp:
             print(f"Selected video file: {self.filename}")
 
         self.video_player = VideoPlayer(self.filename)
+
+        # Set the slider range
+        self.video_slider.nb_frames = self.video_player.num_frames
+        self.video_slider.fps = self.video_player.fps
+
+        # And its metrics accordingly
+        self.video_slider.update(range=(0, self.video_player.num_frames))
+        self.video_slider.update_slider_time_labels(self.current_frame_id)
+
         # Read the first frame
         self.current_frame_id = 0
         ret, frame = self.video_player.video_file.read()
@@ -59,6 +70,7 @@ class VideoPlayerApp:
 
         self.timeout = 1000 // self.video_player.fps
 
+    def create_window(self):
     def update_image(self, ret=False, frame=None):
         if ret:
             imgbytes = cv2.imencode('.ppm', frame)[1].tobytes()
@@ -95,6 +107,11 @@ class VideoPlayerApp:
                 self.update_image(ret, frame)
 
 
+            if self.video_player:
+                # Keep playing the video if the video player is playing
+                ret, frame = self.video_player.keep_playing()
+                # Update the image shown
+                self.update_image(ret, frame)
 
         self.window.close()
 

@@ -23,7 +23,7 @@ class VideoPlayer:
         self.frame = None
 
         self.current_frame_id = 0
-        self.current_frame = self.set_current_frame()
+        self.current_frame = self.set_current_frame_id(self.current_frame_id)
         self.is_playing = False
 
     def read_frame(self, frame_id):
@@ -39,8 +39,17 @@ class VideoPlayer:
 
         return self.ret, self.frame
 
-    def set_current_frame(self):
-        self.current_frame = self.video_file.set(cv2.CAP_PROP_POS_FRAMES, self.current_frame_id)
+    def set_current_frame_id(self, frame_id: int):
+        self.current_frame = self.video_file.set(cv2.CAP_PROP_POS_FRAMES, frame_id)
+        return self.current_frame
+
+    def set_current_frame_from_id(self, frame_id: int):
+        self.set_current_frame_id(frame_id)
+        self.ret, self.frame = self.video_file.read()
+        return self.ret, self.frame
+
+    def get_current_frame_id(self):
+        self.current_frame = self.video_file.get(cv2.CAP_PROP_POS_FRAMES)
         return self.current_frame
 
     def next_frame(self):

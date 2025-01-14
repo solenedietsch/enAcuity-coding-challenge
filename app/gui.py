@@ -111,6 +111,16 @@ class VideoPlayerApp:
                 self.window['-PAUSE-'].update(disabled=True)
                 self.window['-PLAY-'].update(disabled=False)
 
+            elif event == ' ':
+                if self.video_player.is_playing:
+                    self.video_player.pause_video()
+                    self.window['-PAUSE-'].update(disabled=True)
+                    self.window['-PLAY-'].update(disabled=False)
+                else:
+                    self.video_player.play_video()
+                    self.window['-PLAY-'].update(disabled=True)
+                    self.window['-PAUSE-'].update(disabled=False)
+
             elif event == '-NEXT-':
                 ret, frame = self.video_player.next_frame()
                 self.update_image(ret, frame)

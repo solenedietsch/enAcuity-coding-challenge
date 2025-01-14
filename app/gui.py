@@ -7,7 +7,7 @@ from PySimpleGUI import Menu
 from app.components.custom_slider import CustomSlider
 from app.components.image_filter import ImageFilter, FILTER_LIST
 from app.components.video_player import VideoPlayer
-from data.images.output import button_play, button_pause, button_next, button_previous
+from data.images.output import button_next, button_previous, play_button, pause_button
 
 VIDEO_FILENAME = os.path.join(os.getcwd(), "data/video01_cropped.mp4")
 
@@ -71,8 +71,7 @@ class VideoPlayerApp:
             [sg.Image(key='-IMAGE-', size=(854, 480))],
             [time_elapsed_text, self.video_slider, time_remaining_text],
             [sg.Button(image_data=button_previous, key='-PREVIOUS-', border_width=0, button_color=button_color),
-             sg.Button(image_data=button_play, key='-PLAY-', border_width=0, button_color=button_color),
-             sg.Button(image_data=button_pause, key='-PAUSE-', border_width=0, button_color=button_color, disabled=True),
+             sg.Button(image_data=play_button, key='-PLAY_PAUSE-', border_width=0, button_color=button_color),
              sg.Button(image_data=button_next, key='-NEXT-', border_width=0, button_color=button_color)],
             [sg.Button('Apply filter_type - Press (F)', key='-FILTER-')]
         ]
@@ -101,25 +100,10 @@ class VideoPlayerApp:
                 file = sg.popup_get_file('Choose your file', keep_on_top=True)
                 self.update_filename(filename=file)
 
-            elif event == '-PLAY-':
-                self.video_player.play_video()
-                self.window['-PLAY-'].update(disabled=True)
-                self.window['-PAUSE-'].update(disabled=False)
-
-            elif event == '-PAUSE-':
-                self.video_player.pause_video()
-                self.window['-PAUSE-'].update(disabled=True)
-                self.window['-PLAY-'].update(disabled=False)
-
-            elif event == ' ':
-                if self.video_player.is_playing:
-                    self.video_player.pause_video()
-                    self.window['-PAUSE-'].update(disabled=True)
-                    self.window['-PLAY-'].update(disabled=False)
-                else:
-                    self.video_player.play_video()
-                    self.window['-PLAY-'].update(disabled=True)
-                    self.window['-PAUSE-'].update(disabled=False)
+            elif event in ['-PLAY_PAUSE-', ' ']:
+                self.video_player.is_playing = not self.video_player.is_playing
+                button_image = pause_button if self.video_player.is_playing else play_button
+                self.window['-PLAY_PAUSE-'].update(image_data=button_image)
 
             elif event == '-NEXT-':
                 self.ret, self.frame = self.video_player.next_frame()

@@ -122,12 +122,17 @@ class VideoPlayerApp:
                     self.window['-PAUSE-'].update(disabled=False)
 
             elif event == '-NEXT-':
-                ret, frame = self.video_player.next_frame()
-                self.update_image(ret, frame)
+                self.ret, self.frame = self.video_player.next_frame()
+                self.update_image(self.ret, self.frame)
+                # Update the time elapsed and remaining in the GUI
+                self.video_slider.update_slider_time_labels(self.current_frame_id)
+
 
             elif event == '-PREVIOUS-':
-                ret, frame = self.video_player.previous_frame()
-                self.update_image(ret, frame)
+                self.ret, self.frame = self.video_player.previous_frame()
+                self.update_image(self.ret, self.frame)
+                # Update the time elapsed and remaining in the GUI
+                self.video_slider.update_slider_time_labels(self.current_frame_id)
 
             elif event == '-SLIDER-':
                 # Get the frame id from the slider

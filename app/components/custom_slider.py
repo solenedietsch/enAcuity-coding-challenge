@@ -1,4 +1,4 @@
-from PySimpleGUI import Slider, Text, RELIEF_RAISED
+from PySimpleGUI import Slider, Text
 from datetime import timedelta
 
 class CustomSlider(Slider):
@@ -8,14 +8,18 @@ class CustomSlider(Slider):
         self.nb_frames: int = 0
         self.fps: float = 0.0
         self.elapsed_time: Text = time_elapsed
-        self.remaining_time:Text = time_remaining
+        self.remaining_time: Text = time_remaining
 
     def set_nb_frames(self, nb_frames: int) -> None:
         self.nb_frames = nb_frames
         self.update(range=(0, nb_frames))
 
     def get_video_duration_from_id(self, frame_id: int) -> str:
-        # Calculate total seconds
+        # Check if the FPS and the frame id are valid
+        if self.fps <= 0 or frame_id < 0:
+            return "00:00:00"
+
+        # Calculate total seconds according to the current frame id and the FPS
         total_seconds = frame_id/self.fps
 
         # Convert seconds to timedelta object
@@ -29,24 +33,28 @@ class CustomSlider(Slider):
     def get_video_duration(self) -> str:
         return self.get_video_duration_from_id(self.nb_frames)
 
-    def update_remaining_time(self, frame_id: int) -> None:
-        remaining_frames = self.nb_frames - frame_id
-        self.remaining_time.update(self.get_video_duration_from_id(remaining_frames))
+    def get_remaining_time(self, frame_id: int) -> str:
+        if frame_id < 0 or frame_id > self.nb_frames:
+            return "00:00:00"
 
-    def update_elapsed_time(self, frame_id: int) -> None:
-        self.elapsed_time.update(self.get_video_duration_from_id(frame_id))
+        remaining_frames = self.nb_frames - frame_id
+        return self.get_video_duration_from_id(remaining_frames)
+
+    def get_elapsed_time(self, frame_id: int) -> str:
+        if frame_id > self.nb_frames:
+            return self.get_video_duration()
+
+        return self.get_video_duration_from_id(frame_id)
+
+    def update_remaining_time_text(self, frame_id: int) -> None:
+        remaining_time = self.get_remaining_time(frame_id)
+        self.remaining_time.update(remaining_time)
+
+    def update_elapsed_time_text(self, frame_id: int) -> None:
+        elapsed_time = self.get_elapsed_time(frame_id)
+        self.elapsed_time.update(elapsed_time)
 
     def update_slider_time_labels(self, frame_id: int) -> None:
-        """
-        Updates the elapsed time and remaining time labels around the slider.
-
-        This function synchronises the displayed time labels based on the current frame ID,
-        updating the elapsed time (to the left of the slider) and remaining time (to the right).
-
-        :param frame_id: int - The current frame ID indicating the position in the video.
-        :return: :param
-        """
-
-        self.update_remaining_time(frame_id)
-        self.update_elapsed_time(frame_id)
+        self.update_remaining_time_text(frame_id)
+        self.update_elapsed_time_text(frame_id)
 

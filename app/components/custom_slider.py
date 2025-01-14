@@ -5,12 +5,12 @@ class CustomSlider(Slider):
     def __init__(self, slider_key: str, time_elapsed: Text = '', time_remaining: Text = ''):
         super().__init__(range=(0, 100), orientation='h', size=(75, 10), key=slider_key,
                          disable_number_display =True, enable_events=True)
-        self.nb_frames = 0
-        self.fps = 0
-        self.elapsed_time = time_elapsed
-        self.remaining_time = time_remaining
+        self.nb_frames: int = 0
+        self.fps: float = 0.0
+        self.elapsed_time: Text = time_elapsed
+        self.remaining_time:Text = time_remaining
 
-    def get_nb_frames(self, nb_frames: int) -> None:
+    def set_nb_frames(self, nb_frames: int) -> None:
         self.nb_frames = nb_frames
         self.update(range=(0, nb_frames))
 

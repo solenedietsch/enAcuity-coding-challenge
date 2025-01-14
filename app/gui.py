@@ -22,6 +22,8 @@ class VideoPlayerApp:
         self.video_player = None
         self.image_element = self.window['-IMAGE-']
         self.current_frame_id = 0
+        self.frame = None
+        self.ret = None
 
         # Add a default video file
         self.filename = VIDEO_FILENAME
@@ -46,8 +48,8 @@ class VideoPlayerApp:
 
         # Read the first frame
         self.current_frame_id = 0
-        ret, frame = self.video_player.video_file.read()
-        self.update_image(ret, frame)
+        self.ret, self.frame = self.video_player.video_file.read()
+        self.update_image(self.ret, self.frame)
 
         self.timeout = 1000 // self.video_player.fps
 
@@ -75,7 +77,7 @@ class VideoPlayerApp:
 
     def update_image(self, ret=False, frame=None):
         if ret:
-            imgbytes = cv2.imencode('.ppm', frame)[1].tobytes()
+            imgbytes = cv2.imencode('.ppm', self.frame)[1].tobytes()
             self.image_element.update(data=imgbytes)
 
 
@@ -114,15 +116,15 @@ class VideoPlayerApp:
                 # Update the time elapsed and remaining in the GUI
                 self.video_slider.update_slider_time_labels(self.current_frame_id)
                 # Update the image shown
-                ret, frame = self.video_player.set_current_frame_from_id(self.current_frame_id)
-                self.update_image(ret, frame)
+                self.ret, self.frame = self.video_player.set_current_frame_from_id(self.current_frame_id)
+                self.update_image(self.ret, self.frame)
 
 
             if self.video_player:
                 # Keep playing the video if the video player is playing
-                ret, frame = self.video_player.keep_playing()
+                self.ret, self.frame = self.video_player.keep_playing()
                 # Update the image shown
-                self.update_image(ret, frame)
+                self.update_image(self.ret, self.frame)
                 # Update the time elapsed and remaining in the GUI
                 self.current_frame_id = self.video_player.get_current_frame_id()
                 self.video_slider.update_slider_time_labels(self.current_frame_id)

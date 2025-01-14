@@ -121,7 +121,7 @@ class VideoPlayerApp:
                 self.update_image(self.ret, self.frame)
 
 
-            if self.video_player:
+            if self.video_player and self.video_player.is_playing:
                 # Keep playing the video if the video player is playing
                 self.ret, self.frame = self.video_player.keep_playing()
                 # Update the image shown

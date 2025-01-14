@@ -5,10 +5,12 @@ import PySimpleGUI as sg
 from PySimpleGUI import Menu
 
 from app.components.custom_slider import CustomSlider
+from app.components.image_filter import ImageFilter, FILTER_LIST
 from app.components.video_player import VideoPlayer
 from data.images.output import button_play, button_pause, button_next, button_previous
 
 VIDEO_FILENAME = os.path.join(os.getcwd(), "data/video01_cropped.mp4")
+
 
 class VideoPlayerApp:
     def __init__(self):
@@ -25,6 +27,8 @@ class VideoPlayerApp:
         self.current_frame_id = 0
         self.frame = None
         self.ret = None
+        self.is_filter_applied = False
+        self.filtered_image : ImageFilter = ImageFilter(self.frame)
 
         # Add a default video file
         self.filename = VIDEO_FILENAME
@@ -70,13 +74,17 @@ class VideoPlayerApp:
              sg.Button(image_data=button_play, key='-PLAY-', border_width=0, button_color=button_color),
              sg.Button(image_data=button_pause, key='-PAUSE-', border_width=0, button_color=button_color, disabled=True),
              sg.Button(image_data=button_next, key='-NEXT-', border_width=0, button_color=button_color)],
+            [sg.Button('Apply filter_type - Press (F)', key='-FILTER-')]
         ]
 
-        self.window = sg.Window("EnAcuity Player", layout, element_justification='c', finalize=True)
+        self.window = sg.Window("EnAcuity Player", layout, element_justification='c',
+                                 return_keyboard_events=True, finalize=True)
 
 
     def update_image(self, ret=False, frame=None):
         if ret:
+            if self.is_filter_applied:
+                self.frame = self.filtered_image.update_filtered_image(frame)
             imgbytes = cv2.imencode('.ppm', self.frame)[1].tobytes()
             self.image_element.update(data=imgbytes)
 
@@ -120,6 +128,29 @@ class VideoPlayerApp:
                 self.ret, self.frame = self.video_player.set_current_frame_from_id(self.current_frame_id)
                 self.update_image(self.ret, self.frame)
 
+            elif event.lower() == 'f' or  event == '-FILTER-':
+                self.is_filter_applied = not self.is_filter_applied
+                self.ret, self.frame = self.video_player.set_current_frame_from_id(self.current_frame_id-1)
+                self.update_image(self.ret, self.frame)
+
+            elif event in ['Gray', 'Object Detection']:
+                current_filter = event.lower().replace(' ', '_')
+
+                menu_definition = [['File', ['Import', 'Exit']],
+                                   ['Filter', ['Gray', 'Object Detection']]]
+
+                if event == 'Gray':
+                    menu_definition[1][1][0] = '!Gray'
+                    menu_definition[1][1][1] = 'Object Detection'
+                elif event == 'Object Detection':
+                    menu_definition[1][1][0] = 'Gray'
+                    menu_definition[1][1][1] = '!Object Detection'
+
+
+                self.window['-CUST MENUBAR-'].update(menu_definition=menu_definition)
+                self.filtered_image.set_filter_type(current_filter)
+                self.ret, self.frame = self.video_player.set_current_frame_from_id(self.current_frame_id - 1)
+                self.update_image(self.ret, self.frame)
 
             if self.video_player and self.video_player.is_playing:
                 # Keep playing the video if the video player is playing

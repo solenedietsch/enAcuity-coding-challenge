@@ -2,6 +2,7 @@ import os
 
 import cv2
 import PySimpleGUI as sg
+from PySimpleGUI import Menu
 
 from app.components.custom_slider import CustomSlider
 from app.components.video_player import VideoPlayer
@@ -62,8 +63,7 @@ class VideoPlayerApp:
         self.video_slider = CustomSlider('-SLIDER-', time_elapsed_text, time_remaining_text)
 
         layout = [
-            [sg.Text('Select a video to play:', size=(17, 1)), sg.InputText(key='-FILE-', enable_events=True),
-             sg.FileBrowse(target='-FILE-')],
+            [Menu([['File', ['Import', 'Exit']], ['Filter', ['!Gray', 'Object Detection']]],  k='-CUST MENUBAR-')],
             [sg.Image(key='-IMAGE-', size=(854, 480))],
             [time_elapsed_text, self.video_slider, time_remaining_text],
             [sg.Button(image_data=button_previous, key='-PREVIOUS-', border_width=0, button_color=button_color),
@@ -86,11 +86,12 @@ class VideoPlayerApp:
         while True:
             event, values = self.window.read(timeout=self.timeout)
 
-            if event == sg.WIN_CLOSED:
+            if event in (sg.WIN_CLOSED, 'Exit'):
                 break
 
-            elif event == '-FILE-':
-                self.update_filename(values=values)
+            elif event == 'Import':
+                file = sg.popup_get_file('Choose your file', keep_on_top=True)
+                self.update_filename(filename=file)
 
             elif event == '-PLAY-':
                 self.video_player.play_video()

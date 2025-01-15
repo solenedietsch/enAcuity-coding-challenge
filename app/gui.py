@@ -35,11 +35,9 @@ class VideoPlayerApp:
         self.filename = VIDEO_FILENAME
         self.update_filename(filename=self.filename)
 
-    def update_filename(self, filename='', values=None):
-        if filename:
-            self.filename = filename
-        elif values:
-            self.filename = values['-FILE-']
+    def update_filename(self, filename=''):
+        # Update the filename
+        self.filename = filename
 
         # Set video player with the new video file
         self.video_player = VideoPlayer(self.filename)

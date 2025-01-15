@@ -19,6 +19,11 @@ class CustomSlider(Slider):
         self.set_fps(video_player.fps)
 
     def set_nb_frames(self, nb_frames: int) -> None:
+        """
+        Set the number of frames in the video
+        :param nb_frames: The number of frames in the video
+        :return:
+        """
         self.nb_frames = nb_frames
         # Update the slider range, the range is from 0 to the number of frames - 1
         self.update(range=(1, self.nb_frames))

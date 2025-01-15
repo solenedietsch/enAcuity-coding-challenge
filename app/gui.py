@@ -55,7 +55,7 @@ class VideoPlayerApp:
         self.timeout = 1000 // self.video_player.fps
 
     def create_window(self):
-        sg.theme('Black')
+        sg.theme('Black2')
         button_color = sg.theme_background_color()
 
         time_elapsed_text = sg.Text('', key='-TIME_ELAPSED-')
@@ -63,7 +63,8 @@ class VideoPlayerApp:
         self.video_slider = CustomSlider('-SLIDER-', time_elapsed_text, time_remaining_text)
 
         layout = [
-            [Menu([['File', ['Import', 'Exit']], ['Filter', ['!Gray', 'Object Detection']]],  k='-CUST MENUBAR-')],
+            [Menu([['File', ['Import', 'Save', 'Exit']], ['Filter', ['!Gray', 'Object Detection']]],  k='-CUST MENUBAR-',
+                  disabled_text_color='red')],
             [sg.Image(key='-IMAGE-', size=(854, 480))],
             [time_elapsed_text, self.video_slider, time_remaining_text],
             [sg.Button(image_data=button_previous, key='-PREVIOUS-', border_width=0, button_color=button_color),

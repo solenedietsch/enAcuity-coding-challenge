@@ -25,7 +25,6 @@ class VideoPlayer:
         self.frame = None
 
         self.current_frame_id = 0
-        self.current_frame = self.set_current_frame_id(self.current_frame_id)
         self.is_playing = False
 
     def get_nb_frames(self):

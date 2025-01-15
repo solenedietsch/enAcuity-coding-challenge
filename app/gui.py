@@ -8,7 +8,7 @@ from PySimpleGUI import Menu
 from app.components.custom_slider import CustomSlider
 from app.components.image_filter import ImageFilter
 from app.components.video_player import VideoPlayer
-from data.images.output import button_next, button_previous, play_button, pause_button
+from images.output import button_next, button_previous, play_button, pause_button
 
 VIDEO_FILENAME = os.path.join(os.getcwd(), "data/video01_cropped.mp4")
 

@@ -23,6 +23,8 @@ class CustomSlider(Slider):
         # Update the slider range, the range is from 0 to the number of frames - 1
         self.update(range=(1, self.nb_frames))
 
+    def set_fps(self, fps: float) -> None:
+        self.fps = fps
 
     def get_video_duration_from_id(self, frame_id: int) -> str:
         # Check if the FPS and the frame id are valid

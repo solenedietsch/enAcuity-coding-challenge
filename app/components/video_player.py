@@ -63,11 +63,8 @@ class VideoPlayer:
         self.current_frame = self.video_file.get(cv2.CAP_PROP_POS_FRAMES)
         return self.current_frame
 
-    def next_frame(self):
         self.current_frame_id = self.video_file.get(cv2.CAP_PROP_POS_FRAMES)
 
-        if self.current_frame_id < self.num_frames:
-            self.ret, self.frame = self.video_file.read()
     def set_previous_frame(self):
         # Get the current frame id when clicking on the previous button
         current_frame_id = self.get_current_frame_id()

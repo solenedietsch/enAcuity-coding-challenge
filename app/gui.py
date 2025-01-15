@@ -31,7 +31,6 @@ class VideoPlayerApp:
         self.is_filter_applied = False
         self.filtered_image : ImageFilter = ImageFilter(self.frame)
 
-        # Add a default video file
         self.filename = VIDEO_FILENAME
         self.update_filename(filename=self.filename)
 
@@ -52,6 +51,7 @@ class VideoPlayerApp:
         # Update the slider accordingly
         self.update_slider_from_current_id()
 
+        # Set the GUI timeout
         self.timeout = 1000 // self.video_player.fps
 
     def create_window(self):

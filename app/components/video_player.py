@@ -1,4 +1,5 @@
 import cv2
+from pymediainfo import MediaInfo
 
 SUPPORTED_FORMATS = ['.mp4', '.avi', '.mov', '.mkv']
 
@@ -14,7 +15,9 @@ class VideoPlayer:
         self.filename = is_video(filename)
 
         self.video_file = cv2.VideoCapture(self.filename)
-        self.num_frames = self.video_file.get(cv2.CAP_PROP_FRAME_COUNT)
+
+        # Get the metadata of the video file
+        self.num_frames = self.get_nb_frames()
         self.fps = self.video_file.get(cv2.CAP_PROP_FPS)
         self.height = int(self.video_file.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.duration = self.num_frames / self.fps if self.fps > 0 else 0
@@ -25,6 +28,18 @@ class VideoPlayer:
         self.current_frame_id = 0
         self.current_frame = self.set_current_frame_id(self.current_frame_id)
         self.is_playing = False
+
+    def get_nb_frames(self):
+        """
+        Get the number of frames in the video file using the MediaInfo library as it is more reliable than OpenCV
+        """
+        num_frames = 0
+        media_info = MediaInfo.parse(self.filename)
+        for track in media_info.tracks:
+            if track.track_type == "Video":
+                num_frames = int(track.frame_count)
+
+        return num_frames
 
     def read_frame(self, frame_id):
         self.video_file.set(cv2.CAP_PROP_POS_FRAMES, frame_id)

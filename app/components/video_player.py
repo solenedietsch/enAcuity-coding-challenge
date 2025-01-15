@@ -20,7 +20,6 @@ class VideoPlayer:
         self.num_frames = self.get_nb_frames()
         self.fps = self.video_file.get(cv2.CAP_PROP_FPS)
         self.height = int(self.video_file.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        self.duration = self.num_frames / self.fps if self.fps > 0 else 0
 
         self.ret = False
         self.frame = None
@@ -48,9 +47,6 @@ class VideoPlayer:
             raise ValueError("Error reading frame")
         return self.frame
 
-    def keep_playing(self):
-        if self.is_playing:
-            self.ret, self.frame = self.video_file.read()
 
         return self.ret, self.frame
 

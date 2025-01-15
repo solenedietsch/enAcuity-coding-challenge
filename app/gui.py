@@ -138,8 +138,10 @@ class VideoPlayerApp:
                 self.update_slider_from_current_id()
 
             elif event == '-SLIDER-':
-                # Get the frame id from the slider
-                self.current_frame_id = int(values['-SLIDER-'])
+                # Setting the slider id to -1 as the next frame is shown
+                current_frame_id = int(values['-SLIDER-'])
+                # And update the displayed frame
+                self.video_player.set_current_frame_id(current_frame_id)
                 # Get the new frame and update the window image element
                 self.update_image_element()
                 # Update the slider accordingly

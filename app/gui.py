@@ -1,6 +1,7 @@
 import os
 
 import cv2
+from datetime import datetime
 import PySimpleGUI as sg
 from PySimpleGUI import Menu
 
@@ -87,6 +88,11 @@ class VideoPlayerApp:
             imgbytes = cv2.imencode('.ppm', self.frame)[1].tobytes()
             self.image_element.update(data=imgbytes)
 
+    def save_current_frame(self):
+        # Make sure the output folder exist or creates its is not created
+        os.makedirs('../output', exist_ok=True)
+        datatime_f = datetime.now().strftime('%Y_%m_%d-%H_%M_%S_%f')
+        cv2.imwrite(f'../output/frame-{datatime_f}.png', self.frame)
 
     def launch_app(self):
         # Main loop
@@ -131,6 +137,9 @@ class VideoPlayerApp:
                 self.is_filter_applied = not self.is_filter_applied
                 self.ret, self.frame = self.video_player.set_current_frame_from_id(self.current_frame_id-1)
                 self.update_image(self.ret, self.frame)
+
+            elif event.lower() == 's' or  event == 'Save':
+                self.save_current_frame()
 
             elif event in ['Gray', 'Object Detection']:
                 current_filter = event.lower().replace(' ', '_')

@@ -1,6 +1,6 @@
 # -- Project information
 
-project = 'Lumache'
+project = 'EnAcuity coding challenge'
 copyright = '2024, Solene'
 author = 'Solene'
 

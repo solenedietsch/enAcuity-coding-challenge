@@ -3,6 +3,8 @@
 ## Overview
 This project is a coding challenge focused on building an **interactive application** for analysing surgical videos. The application is designed to perform **frame-by-frame analysis** and support **real-time processing** for in-depth exploration of surgical procedures.
 
+![Alt Text](images/logo.png)
+
 ## Features
 - **Frame-by-frame video analysis**: Allows users to step through each frame of a surgical video.
 - **Real-time processing**: Provides an efficient interface for real-time surgical video review.

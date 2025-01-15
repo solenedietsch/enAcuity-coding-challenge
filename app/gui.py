@@ -46,7 +46,6 @@ class VideoPlayerApp:
         self.video_slider.update_metadata_from_video_player(self.video_player)
 
         # Read the first frame
-        self.current_frame_id = 0
         self.update_image_element()
 
         # Update the slider accordingly

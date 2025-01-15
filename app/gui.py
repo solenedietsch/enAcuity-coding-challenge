@@ -130,6 +130,8 @@ class VideoPlayerApp:
                 self.update_slider_from_current_id()
 
             elif event == '-PREVIOUS-':
+                # Set the current frame id to the previous frame
+                self.video_player.set_previous_frame()
                 # Update the image accordingly
                 self.update_image_element()
                 # Update the gui component such as the slider

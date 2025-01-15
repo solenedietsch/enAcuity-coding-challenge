@@ -66,8 +66,6 @@ class VideoPlayer:
         # Get the current frame id when clicking on the previous button
         current_frame_id = self.get_current_frame_id()
 
-        return self.ret, self.frame
-
         # The index must 2, as the frame id is set to -2, but displayed -1 with read.
         previous_frame_id = current_frame_id - 2
 

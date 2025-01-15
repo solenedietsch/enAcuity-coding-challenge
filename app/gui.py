@@ -31,6 +31,7 @@ class VideoPlayerApp:
         self.is_filter_applied = False
         self.filtered_image : ImageFilter = ImageFilter(self.frame)
 
+        # Load a default video file
         self.filename = VIDEO_FILENAME
         self.update_filename(filename=self.filename)
 

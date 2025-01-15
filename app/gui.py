@@ -16,7 +16,7 @@ VIDEO_FILENAME = os.path.join(os.getcwd(), "data/video01_cropped.mp4")
 class VideoPlayerApp:
     def __init__(self):
         self.window= None
-        self.video_slider = None
+        self.video_slider: CustomSlider = None
 
         # Build the window from layout
         self.create_window()

@@ -45,12 +45,10 @@ class VideoPlayerApp:
         self.video_player = VideoPlayer(self.filename)
 
         # Set the slider range
-        self.video_slider.nb_frames = self.video_player.num_frames
-        self.video_slider.fps = self.video_player.fps
-
         # And its metrics accordingly
         self.video_slider.update(range=(0, self.video_player.num_frames))
         self.video_slider.update_slider_time_labels(self.current_frame_id)
+        self.video_slider.update_metadata_from_video_player(self.video_player)
 
         # Read the first frame
         self.current_frame_id = 0

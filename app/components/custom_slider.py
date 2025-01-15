@@ -1,6 +1,9 @@
 from PySimpleGUI import Slider, Text
 from datetime import timedelta
 
+from app.components.video_player import VideoPlayer
+
+
 class CustomSlider(Slider):
     def __init__(self, slider_key: str, time_elapsed: Text = '', time_remaining: Text = ''):
         super().__init__(range=(0, 100), orientation='h', size=(75, 10), key=slider_key,
@@ -9,6 +12,10 @@ class CustomSlider(Slider):
         self.fps: float = 0.0
         self.elapsed_time: Text = time_elapsed
         self.remaining_time: Text = time_remaining
+
+    def update_metadata_from_video_player(self, video_player: VideoPlayer):
+        self.set_nb_frames(video_player.num_frames)
+        self.set_fps(video_player.fps)
 
     def set_nb_frames(self, nb_frames: int) -> None:
         self.nb_frames = nb_frames

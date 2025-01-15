@@ -24,6 +24,12 @@ intersphinx_mapping = {
 }
 intersphinx_disabled_domains = ['std']
 
+# Enable Markdown file suffixes
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.md': 'markdown',
+}
+
 templates_path = ['_templates']
 
 # -- Options for HTML output

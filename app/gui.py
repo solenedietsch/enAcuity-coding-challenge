@@ -43,14 +43,14 @@ class VideoPlayerApp:
         self.video_player = VideoPlayer(self.filename)
 
         # Set the slider range
-        # And its metrics accordingly
-        self.video_slider.update(range=(0, self.video_player.num_frames))
-        self.video_slider.update_slider_time_labels(self.current_frame_id)
         self.video_slider.update_metadata_from_video_player(self.video_player)
 
         # Read the first frame
         self.current_frame_id = 0
         self.update_image_element()
+
+        # Update the slider accordingly
+        self.update_slider_from_current_id()
 
         self.timeout = 1000 // self.video_player.fps
 
@@ -92,6 +92,13 @@ class VideoPlayerApp:
             # And update the window image element
             self.image_element.update(data=imgbytes)
 
+    def update_slider_from_current_id(self):
+        self.current_frame_id = self.video_player.get_current_frame_id()
+
+        # Update the slider value
+        self.video_slider.update(self.current_frame_id)
+        self.video_slider.update_slider_time_labels(self.current_frame_id)
+
     def save_current_frame(self):
         # Make sure the output folder exist or creates its is not created
         os.makedirs('../output', exist_ok=True)
@@ -116,26 +123,24 @@ class VideoPlayerApp:
                 self.window['-PLAY_PAUSE-'].update(image_data=button_image)
 
             elif event == '-NEXT-':
-                # Update the time elapsed and remaining in the GUI
-                self.video_slider.update_slider_time_labels(self.current_frame_id)
-
                 # Set the next image
                 self.update_image_element()
+                # Update the slider value
+                self.update_slider_from_current_id()
 
             elif event == '-PREVIOUS-':
-                # Update the time elapsed and remaining in the GUI
-                self.video_slider.update_slider_time_labels(self.current_frame_id)
                 # Update the image accordingly
                 self.update_image_element()
+                # Update the gui component such as the slider
+                self.update_slider_from_current_id()
 
             elif event == '-SLIDER-':
                 # Get the frame id from the slider
                 self.current_frame_id = int(values['-SLIDER-'])
-                # Update the time elapsed and remaining in the GUI
-                self.video_slider.update_slider_time_labels(self.current_frame_id)
-                # Update the image shown
                 # Get the new frame and update the window image element
                 self.update_image_element()
+                # Update the slider accordingly
+                self.update_slider_from_current_id()
 
             elif event.lower() == 'f' or  event == '-FILTER-':
                 self.is_filter_applied = not self.is_filter_applied
@@ -169,8 +174,7 @@ class VideoPlayerApp:
                 self.update_image_element()
 
                 # Update the time elapsed and remaining in the GUI
-                self.current_frame_id = self.video_player.get_current_frame_id()
-                self.video_slider.update_slider_time_labels(self.current_frame_id)
+                self.update_slider_from_current_id()
 
         self.window.close()
 

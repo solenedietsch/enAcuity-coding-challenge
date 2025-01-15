@@ -6,8 +6,9 @@ from app.components.video_player import VideoPlayer
 
 class CustomSlider(Slider):
     def __init__(self, slider_key: str, time_elapsed: Text = '', time_remaining: Text = ''):
-        super().__init__(range=(0, 100), orientation='h', size=(75, 10), key=slider_key,
-                         disable_number_display =True, enable_events=True)
+        super().__init__(range=(1, 100), orientation='h', size=(75, 10), key=slider_key,
+                         disable_number_display=True, enable_events=True)
+
         self.nb_frames: int = 0
         self.fps: float = 0.0
         self.elapsed_time: Text = time_elapsed
@@ -19,7 +20,9 @@ class CustomSlider(Slider):
 
     def set_nb_frames(self, nb_frames: int) -> None:
         self.nb_frames = nb_frames
-        self.update(range=(0, nb_frames))
+        # Update the slider range, the range is from 0 to the number of frames - 1
+        self.update(range=(1, self.nb_frames))
+
 
     def get_video_duration_from_id(self, frame_id: int) -> str:
         # Check if the FPS and the frame id are valid

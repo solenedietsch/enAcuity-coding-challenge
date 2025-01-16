@@ -21,6 +21,8 @@ class ImageFilter:
             self.filtered_image = self.gray_filter()
         elif self.filter_type == 'object_detection':
             self.filtered_image = self.object_detection_filter()
+        elif self.filter_type == 'detect_edges':
+            self.filtered_image = self.detect_edges()
 
         return self.filtered_image
 
@@ -54,5 +56,16 @@ class ImageFilter:
             # Draw bounding box and label
             cv2.rectangle(self.filtered_image, (int(x1), int(y1)), (int(x2), int(y2)), color, 2)  # Bounding box
             cv2.putText(self.filtered_image, label, (int(x1) + 5, int(y2) - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)  # Label
+
+        return self.filtered_image
+
+    def detect_edges(self):
+        current_image = self.image.copy()
+
+        # Convert to grayscale
+        gray_image = cv2.cvtColor(current_image, cv2.COLOR_BGR2GRAY)
+
+        # Perform Canny Edge Detection
+        self.filtered_image = cv2.Canny(gray_image, threshold1=0, threshold2=150)
 
         return self.filtered_image

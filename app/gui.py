@@ -63,7 +63,8 @@ class VideoPlayerApp:
         self.video_slider = CustomSlider('-SLIDER-', time_elapsed_text, time_remaining_text)
 
         layout = [
-            [Menu([['File', ['Import', 'Save', 'Exit']], ['Filter', ['!Gray', 'Object Detection']]],  k='-CUST MENUBAR-',
+            [Menu([['File', ['Import', 'Save', 'Exit']],
+                   ['Filter', ['!Gray', 'Object Detection', 'Detect edges']]],  k='-CUST MENUBAR-',
                   disabled_text_color='red')],
             [sg.Image(key='-IMAGE-', size=(854, 480))],
             [time_elapsed_text, self.video_slider, time_remaining_text],
@@ -155,18 +156,24 @@ class VideoPlayerApp:
             elif event.lower() == 's' or  event == 'Save':
                 self.save_current_frame()
 
-            elif event in ['Gray', 'Object Detection']:
+            elif event in ['Gray', 'Object Detection', 'Detect edges']:
                 current_filter = event.lower().replace(' ', '_')
 
                 menu_definition = [['File', ['Import', 'Exit']],
-                                   ['Filter', ['Gray', 'Object Detection']]]
+                                   ['Filter', ['Gray', 'Object Detection', 'Detect edges']]]
 
                 if event == 'Gray':
                     menu_definition[1][1][0] = '!Gray'
                     menu_definition[1][1][1] = 'Object Detection'
+                    menu_definition[1][1][2] = 'Detect edges'
                 elif event == 'Object Detection':
                     menu_definition[1][1][0] = 'Gray'
                     menu_definition[1][1][1] = '!Object Detection'
+                    menu_definition[1][1][2] = 'Detect edges'
+                elif event == 'Detect edges':
+                    menu_definition[1][1][0] = 'Gray'
+                    menu_definition[1][1][1] = 'Object Detection'
+                    menu_definition[1][1][2] = '!Detect edges'
 
 
                 self.window['-CUST MENUBAR-'].update(menu_definition=menu_definition)

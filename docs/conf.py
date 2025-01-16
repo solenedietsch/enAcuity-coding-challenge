@@ -24,9 +24,9 @@ intersphinx_mapping = {
 }
 intersphinx_disabled_domains = ['std']
 
-# Enable Markdown file suffixes
 source_suffix = {
     '.rst': 'restructuredtext',
+    '.txt': 'markdown',
     '.md': 'markdown',
 }
 
@@ -38,3 +38,12 @@ html_theme = 'sphinx_rtd_theme'
 
 # -- Options for EPUB output
 epub_show_urls = 'footnote'
+
+myst_enable_extensions = [
+    "linkify",           # Automatically turn URLs into links
+    "replacements",      # Enable text replacements
+    "heading_anchors",   # Add anchors to headers
+    "smartquotes",       # Convert quotes to typographic quotes
+    "html_admonition",   # Render admonitions in Markdown
+    "html_image",        # Render HTML-style images
+]

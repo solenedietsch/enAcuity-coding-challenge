@@ -15,6 +15,20 @@ class CustomSlider(Slider):
         self.remaining_time: Text = time_remaining
 
     def update_metadata_from_video_player(self, video_player: VideoPlayer):
+        """
+        Update the metadata of the slider using the metadata from the video player.
+            This method retrieves the number of frames and the frames-per-second (FPS)
+        from the given VideoPlayer instance and updates the slider's metadata accordingly.
+
+        Parameters:
+            video_player (VideoPlayer):
+                An instance of the VideoPlayer class containing metadata such as
+                the total number of frames (`num_frames`) and frames-per-second (`fps`).
+
+        Returns:
+            None
+        """
+
         self.set_nb_frames(video_player.num_frames)
         self.set_fps(video_player.fps)
 

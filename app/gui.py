@@ -149,6 +149,16 @@ class VideoPlayerApp:
         self.update_image_element(self.ret, self.frame)
 
     def save_current_frame(self):
+        """
+        Save the current displayed frame to the output folder.
+
+        It will save the image with or without the applied filter.
+        Generate a unique filename that includes the current frame id and the current datetime.
+        :return:
+        """
+        # Get the current frame id for reference
+        current_frame_id = int(self.video_player.get_current_frame_id())
+
         # Make sure the output folder exist or creates its is not created
         os.makedirs('output', exist_ok=True)
         datatime_f = datetime.now().strftime('%Y_%m_%d-%H_%M_%S_%f')

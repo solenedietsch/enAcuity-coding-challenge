@@ -8,7 +8,6 @@ Source code is available at `enAcuity-coding-challenge <https://github.com/solen
    :maxdepth: 2
 
 .. include:: ../README.md
-   :parser: myst_parser
 
 
 

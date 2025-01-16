@@ -152,7 +152,7 @@ class VideoPlayerApp:
         # Make sure the output folder exist or creates its is not created
         os.makedirs('output', exist_ok=True)
         datatime_f = datetime.now().strftime('%Y_%m_%d-%H_%M_%S_%f')
-        cv2.imwrite(f'output/frame-{datatime_f}.png', self.frame)
+        cv2.imwrite(f'output/frame_{current_frame_id}-{datatime_f}.png', self.frame)
 
     def launch_app(self):
         # Main loop

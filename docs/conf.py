@@ -15,7 +15,8 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
-    'myst_parser'
+    'myst_parser',
+    'autodoc2',
 ]
 
 intersphinx_mapping = {
@@ -46,4 +47,8 @@ myst_enable_extensions = [
     "smartquotes",       # Convert quotes to typographic quotes
     "html_admonition",   # Render admonitions in Markdown
     "html_image",        # Render HTML-style images
+]
+
+autodoc2_packages = [
+    "components/custom_slider.py"
 ]

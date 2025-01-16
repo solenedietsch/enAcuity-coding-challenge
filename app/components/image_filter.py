@@ -60,12 +60,13 @@ class ImageFilter:
         return self.filtered_image
 
     def detect_edges(self):
-        current_image = self.image.copy()
-
-        # Convert to grayscale
-        gray_image = cv2.cvtColor(current_image, cv2.COLOR_BGR2GRAY)
-
-        # Perform Canny Edge Detection
-        self.filtered_image = cv2.Canny(gray_image, threshold1=0, threshold2=150)
-
-        return self.filtered_image
+        print('Detecting edges')
+        # current_image = self.image.copy()
+        #
+        # # Convert to grayscale
+        # gray_image = cv2.cvtColor(current_image, cv2.COLOR_BGR2GRAY)
+        #
+        # # Perform Canny Edge Detection
+        # self.filtered_image = cv2.Canny(gray_image, threshold1=0, threshold2=150)
+        #
+        return self.image

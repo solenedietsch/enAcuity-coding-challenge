@@ -15,27 +15,32 @@ VIDEO_FILENAME = os.path.join(os.getcwd(), "data/video01_cropped.mp4")
 
 class VideoPlayerApp:
     def __init__(self):
-        self.window= None
-        self.video_slider: CustomSlider = None
+        self.window: sg.Window|None = None
+        self.video_slider: CustomSlider|None = None
 
         # Build the window from layout
         self.create_window()
 
-        self.timeout = 0
+        self.timeout: int = 0
 
         self.video_player = None
-        self.image_element = self.window['-IMAGE-']
-        self.current_frame_id = 0
+        self.image_element: sg.Image = self.window['-IMAGE-']
+        self.current_frame_id: int = 0
         self.frame = None
-        self.ret = None
-        self.is_filter_applied = False
+        self.ret: bool = False
+        self.is_filter_applied: bool = False
         self.filtered_image : ImageFilter = ImageFilter(self.frame)
 
         # Load a default video file
-        self.filename = VIDEO_FILENAME
+        self.filename: str = VIDEO_FILENAME
         self.update_filename(filename=self.filename)
 
-    def update_filename(self, filename=''):
+    def update_filename(self, filename: str=''):
+        """
+        Update the filename and the video player using the new video file.
+        :param filename: the new video filepath.
+        :return:
+        """
         # Update the filename
         self.filename = filename
 
@@ -55,13 +60,16 @@ class VideoPlayerApp:
         self.timeout = 1000 // self.video_player.fps
 
     def create_window(self):
+        # Set the theme
         sg.theme('Black2')
         button_color = sg.theme_background_color()
 
+        # Create the custom slider
         time_elapsed_text = sg.Text('', key='-TIME_ELAPSED-')
         time_remaining_text = sg.Text('', key='-TIME_REMAINING-')
         self.video_slider = CustomSlider('-SLIDER-', time_elapsed_text, time_remaining_text)
 
+        # Build the layout
         layout = [
             [Menu([['File', ['Import', 'Save', 'Exit']],
                    ['Filter', ['!Gray', 'Object Detection', 'Detect edges']]],  k='-CUST MENUBAR-',
@@ -74,11 +82,21 @@ class VideoPlayerApp:
             [sg.Button('Apply filter_type - Press (F)', key='-FILTER-')]
         ]
 
+        # Finally, generate the window
         self.window = sg.Window("EnAcuity Player", layout, element_justification='c',
                                  return_keyboard_events=True, finalize=True)
 
 
     def update_image_element(self, ret=None, frame=None):
+        """
+        Update the image element with the current frame.
+
+        If no frame is provided, the current frame is read from the video player.
+        In case, the filter is applied; the filtered image is displayed instead.
+        :param ret: boolean indicating if the frame was read successfully.
+        :param frame: the frame to be displayed.
+        :return:
+        """
         if ret is None and frame is None:
             # Keep playing the video if the video player is playing
             self.ret, self.frame = self.video_player.video_file.read()
@@ -95,6 +113,12 @@ class VideoPlayerApp:
             self.image_element.update(data=imgbytes)
 
     def update_slider_from_current_id(self):
+        """
+        Update the slider value from the current frame id.
+
+        Also update the time labels in the GUI.
+        :return:
+        """
         self.current_frame_id = self.video_player.get_current_frame_id()
 
         # Update the slider value
@@ -162,19 +186,9 @@ class VideoPlayerApp:
                 menu_definition = [['File', ['Import', 'Exit']],
                                    ['Filter', ['Gray', 'Object Detection', 'Detect edges']]]
 
-                if event == 'Gray':
-                    menu_definition[1][1][0] = '!Gray'
-                    menu_definition[1][1][1] = 'Object Detection'
-                    menu_definition[1][1][2] = 'Detect edges'
-                elif event == 'Object Detection':
-                    menu_definition[1][1][0] = 'Gray'
-                    menu_definition[1][1][1] = '!Object Detection'
-                    menu_definition[1][1][2] = 'Detect edges'
-                elif event == 'Detect edges':
-                    menu_definition[1][1][0] = 'Gray'
-                    menu_definition[1][1][1] = 'Object Detection'
-                    menu_definition[1][1][2] = '!Detect edges'
-
+                # Highlight the selected filter
+                filters = ['Gray', 'Object Detection', 'Detect edges']
+                menu_definition[1][1] = [f'!{filter}' if filter == event else filter for filter in filters]
 
                 self.window['-CUST MENUBAR-'].update(menu_definition=menu_definition)
                 self.filtered_image.set_filter_type(current_filter)

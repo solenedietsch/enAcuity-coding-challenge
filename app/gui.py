@@ -125,6 +125,29 @@ class VideoPlayerApp:
         self.video_slider.update(self.current_frame_id)
         self.video_slider.update_slider_time_labels(self.current_frame_id)
 
+    def update_current_filter(self, event: str):
+        """
+        Update the current filter applied to the image.
+
+        Also update the layout, to disable the selected filter.
+
+        :param event: the menu event that triggered the filter change.
+        :return:
+        """
+        current_filter = event.lower().replace(' ', '_')
+
+        menu_definition = [['File', ['Import', 'Exit']],
+                           ['Filter', ['Gray', 'Object Detection', 'Detect edges']]]
+
+        # Highlight the selected filter
+        filters = ['Gray', 'Object Detection', 'Detect edges']
+        menu_definition[1][1] = [f'!{filter}' if filter == event else filter for filter in filters]
+
+        self.window['-CUST MENUBAR-'].update(menu_definition=menu_definition)
+        self.filtered_image.set_filter_type(current_filter)
+        self.ret, self.frame = self.video_player.set_current_frame_from_frame_id(self.current_frame_id)
+        self.update_image_element(self.ret, self.frame)
+
     def save_current_frame(self):
         # Make sure the output folder exist or creates its is not created
         os.makedirs('output', exist_ok=True)
@@ -181,19 +204,7 @@ class VideoPlayerApp:
                 self.save_current_frame()
 
             elif event in ['Gray', 'Object Detection', 'Detect edges']:
-                current_filter = event.lower().replace(' ', '_')
-
-                menu_definition = [['File', ['Import', 'Exit']],
-                                   ['Filter', ['Gray', 'Object Detection', 'Detect edges']]]
-
-                # Highlight the selected filter
-                filters = ['Gray', 'Object Detection', 'Detect edges']
-                menu_definition[1][1] = [f'!{filter}' if filter == event else filter for filter in filters]
-
-                self.window['-CUST MENUBAR-'].update(menu_definition=menu_definition)
-                self.filtered_image.set_filter_type(current_filter)
-                self.ret, self.frame = self.video_player.set_current_frame_from_frame_id(self.current_frame_id)
-                self.update_image_element(self.ret, self.frame)
+                self.update_current_filter(event)
 
             elif self.video_player and self.video_player.is_playing:
                 # Update the image shown

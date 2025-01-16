@@ -30,7 +30,6 @@ class ImageFilter:
         gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
         gray_bgr = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)  # Convert to 3-channel BGR
         self.filtered_image = gray_bgr
-        cv2.imwrite(f'image.jpg', self.image)
         return self.filtered_image
 
 

@@ -7,7 +7,7 @@ from app.components.video_player import VideoPlayer
 class CustomSlider(Slider):
     def __init__(self, slider_key: str, time_elapsed: Text = '', time_remaining: Text = ''):
         super().__init__(range=(1, 100), orientation='h', size=(75, 10), key=slider_key,
-                         disable_number_display=True, enable_events=True)
+                         disable_number_display=False, enable_events=True)
 
         self.nb_frames: int = 0
         self.fps: float = 0.0

@@ -6,7 +6,6 @@ Source code is available at `enAcuity-coding-challenge <https://github.com/solen
 
 .. toctree::
    :maxdepth: 2
-   :caption: Table of Contents
 
 .. include:: ../README.md
    :parser: myst_parser

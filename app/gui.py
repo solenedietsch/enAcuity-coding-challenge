@@ -79,7 +79,7 @@ class VideoPlayerApp:
             [sg.Button(image_data=button_previous, key='-PREVIOUS-', border_width=0, button_color=button_color),
              sg.Button(image_data=play_button, key='-PLAY_PAUSE-', border_width=0, button_color=button_color),
              sg.Button(image_data=button_next, key='-NEXT-', border_width=0, button_color=button_color)],
-            [sg.Button('Apply filter_type - Press (F)', key='-FILTER-')]
+            [sg.Button('Apply filter - Press (F)', key='-FILTER-')]
         ]
 
         # Finally, generate the window
